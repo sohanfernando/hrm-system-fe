@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { FileText } from "lucide-react";
+import { FileText, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Select";
 import { FileUpload } from "@/components/ui/FileUpload";
@@ -31,6 +31,7 @@ export function EmployeeDocumentsSection({ employeeId }: { employeeId: number })
   const [downloadingId, setDownloadingId] = useState<number | null>(null);
   const [deletingDocument, setDeletingDocument] = useState<EmployeeDocument | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const loadDocuments = useCallback(async () => {
     setIsLoading(true);
@@ -84,12 +85,13 @@ export function EmployeeDocumentsSection({ employeeId }: { employeeId: number })
   const handleDelete = async () => {
     if (!deletingDocument) return;
     setIsDeleting(true);
+    setDeleteError(null);
     try {
       await documentsApi.remove(deletingDocument.id);
       setDeletingDocument(null);
       loadDocuments();
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Failed to delete document.");
+      setDeleteError(err instanceof ApiError ? err.message : "Failed to delete document.");
     } finally {
       setIsDeleting(false);
     }
@@ -151,6 +153,7 @@ export function EmployeeDocumentsSection({ employeeId }: { employeeId: number })
                   Download
                 </Button>
                 <Button size="sm" variant="danger" onClick={() => setDeletingDocument(doc)}>
+                  <Trash2 size={14} />
                   Delete
                 </Button>
               </div>
@@ -165,8 +168,12 @@ export function EmployeeDocumentsSection({ employeeId }: { employeeId: number })
         description={`Are you sure you want to delete "${deletingDocument?.original_file_name}"? This cannot be undone.`}
         confirmLabel="Delete"
         isConfirming={isDeleting}
+        error={deleteError}
         onConfirm={handleDelete}
-        onCancel={() => setDeletingDocument(null)}
+        onCancel={() => {
+          setDeletingDocument(null);
+          setDeleteError(null);
+        }}
       />
     </div>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { Trash2 } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Card } from "@/components/ui/Card";
@@ -134,6 +135,7 @@ export default function PayrollPage() {
           </Button>
           {isAdmin && (
             <Button size="sm" variant="danger" onClick={() => setDeletingPayroll(row)}>
+              <Trash2 size={14} />
               Delete
             </Button>
           )}
@@ -162,7 +164,6 @@ export default function PayrollPage() {
         />
 
         {error && <Alert variant="danger">{error}</Alert>}
-        {deleteError && <Alert variant="danger">{deleteError}</Alert>}
 
         <div className="flex flex-col gap-3 sm:flex-row sm:max-w-lg">
           <Select
@@ -213,8 +214,12 @@ export default function PayrollPage() {
         description="Are you sure you want to delete this payroll record? This cannot be undone."
         confirmLabel="Delete"
         isConfirming={isDeleting}
+        error={deleteError}
         onConfirm={handleDelete}
-        onCancel={() => setDeletingPayroll(null)}
+        onCancel={() => {
+          setDeletingPayroll(null);
+          setDeleteError(null);
+        }}
       />
     </DashboardLayout>
   );

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Trash2 } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Card } from "@/components/ui/Card";
@@ -109,6 +110,7 @@ export default function EmployeesPage() {
           </Button>
           {isAdmin && (
             <Button size="sm" variant="danger" onClick={() => setDeletingEmployee(row)}>
+              <Trash2 size={14} />
               Delete
             </Button>
           )}
@@ -131,7 +133,6 @@ export default function EmployeesPage() {
         />
 
         {error && <Alert variant="danger">{error}</Alert>}
-        {deleteError && <Alert variant="danger">{deleteError}</Alert>}
 
         <div className="flex flex-col gap-3 sm:flex-row sm:max-w-lg">
           <Select
@@ -175,8 +176,12 @@ export default function EmployeesPage() {
         description={`Are you sure you want to delete "${deletingEmployee?.first_name} ${deletingEmployee?.last_name}"? Their documents and payroll records will also be deleted. This cannot be undone.`}
         confirmLabel="Delete"
         isConfirming={isDeleting}
+        error={deleteError}
         onConfirm={handleDelete}
-        onCancel={() => setDeletingEmployee(null)}
+        onCancel={() => {
+          setDeletingEmployee(null);
+          setDeleteError(null);
+        }}
       />
     </DashboardLayout>
   );

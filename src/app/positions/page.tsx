@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { Trash2 } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Card } from "@/components/ui/Card";
@@ -88,6 +89,7 @@ export default function PositionsPage() {
     {
       key: "description",
       header: "Description",
+      className: "max-w-md break-words",
       render: (row) => row.description || <span className="text-muted">—</span>,
     },
     {
@@ -113,6 +115,7 @@ export default function PositionsPage() {
           </Button>
           {isAdmin && (
             <Button size="sm" variant="danger" onClick={() => setDeletingPosition(row)}>
+              <Trash2 size={14} />
               Delete
             </Button>
           )}
@@ -141,7 +144,6 @@ export default function PositionsPage() {
         />
 
         {error && <Alert variant="danger">{error}</Alert>}
-        {deleteError && <Alert variant="danger">{deleteError}</Alert>}
 
         <div className="max-w-xs">
           <Select
@@ -184,8 +186,12 @@ export default function PositionsPage() {
         description={`Are you sure you want to delete "${deletingPosition?.title}"? This cannot be undone.`}
         confirmLabel="Delete"
         isConfirming={isDeleting}
+        error={deleteError}
         onConfirm={handleDelete}
-        onCancel={() => setDeletingPosition(null)}
+        onCancel={() => {
+          setDeletingPosition(null);
+          setDeleteError(null);
+        }}
       />
     </DashboardLayout>
   );

@@ -29,7 +29,7 @@ export function Table<T>({
 }: TableProps<T>) {
   return (
     <div className="overflow-x-auto rounded-card border border-border bg-white">
-      <table className="w-full min-w-max text-left text-body">
+      <table className="w-full text-left text-body">
         <thead>
           <tr className="border-b border-border bg-surface">
             {columns.map((column) => (
@@ -68,7 +68,10 @@ export function Table<T>({
                 }`}
               >
                 {columns.map((column) => (
-                  <td key={column.key} className={`px-4 py-3 text-foreground ${column.className ?? ""}`}>
+                  <td
+                    key={column.key}
+                    className={`px-4 py-3 align-top text-foreground ${column.className ?? ""}`}
+                  >
                     {column.render(row)}
                   </td>
                 ))}

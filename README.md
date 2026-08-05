@@ -82,8 +82,10 @@ src/
   unauthenticated visitors away from `/dashboard`, `/departments`, `/positions`, `/employees`, and
   `/payroll` before the page ever renders. `AuthProvider` adds a client-side safety net for the case
   where the token is invalidated mid-session (e.g. a `401` from an API call).
-- New accounts always register as `HR`; the public register form has no role selector by design —
-  see the backend README for how `ADMIN` accounts are provisioned.
+- The register form has no role selector by design — a caller can never choose their own role. The
+  backend auto-promotes the very first registered account to `ADMIN`; every account after that
+  registers as `HR`. See the backend README for details and how to provision additional `ADMIN`
+  accounts.
 - `ADMIN` vs `HR` is reflected in the UI: both roles can create/update records, but **Delete**
   buttons only render for `ADMIN` users, matching the backend's authorization rules.
 

@@ -72,7 +72,7 @@ export default function RegisterPage() {
           value={password}
           onChange={(event) => setPassword(event.target.value)}
           placeholder="At least 6 characters"
-          helperText="New accounts are created with standard HR access."
+          helperText="Your account's access level is assigned automatically."
         />
         <Input
           label="Confirm password"

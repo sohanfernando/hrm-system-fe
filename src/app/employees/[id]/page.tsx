@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { Trash2 } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Card } from "@/components/ui/Card";
@@ -82,6 +83,7 @@ export default function EmployeeDetailPage() {
               </Button>
               {isAdmin && (
                 <Button variant="danger" onClick={() => setIsDeleteOpen(true)} disabled={!employee}>
+                  <Trash2 size={16} />
                   Delete
                 </Button>
               )}
@@ -90,7 +92,6 @@ export default function EmployeeDetailPage() {
         />
 
         {error && <Alert variant="danger">{error}</Alert>}
-        {deleteError && <Alert variant="danger">{deleteError}</Alert>}
         {successMessage && <Alert variant="success">{successMessage}</Alert>}
 
         {isLoading ? (
@@ -126,8 +127,12 @@ export default function EmployeeDetailPage() {
         description={`Are you sure you want to delete "${employee?.first_name} ${employee?.last_name}"? Their documents and payroll records will also be deleted. This cannot be undone.`}
         confirmLabel="Delete"
         isConfirming={isDeleting}
+        error={deleteError}
         onConfirm={handleDelete}
-        onCancel={() => setIsDeleteOpen(false)}
+        onCancel={() => {
+          setIsDeleteOpen(false);
+          setDeleteError(null);
+        }}
       />
     </DashboardLayout>
   );

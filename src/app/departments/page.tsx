@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { Trash2 } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Card } from "@/components/ui/Card";
@@ -77,6 +78,7 @@ export default function DepartmentsPage() {
     {
       key: "description",
       header: "Description",
+      className: "max-w-md break-words",
       render: (row) => row.description || <span className="text-muted">—</span>,
     },
     {
@@ -102,6 +104,7 @@ export default function DepartmentsPage() {
           </Button>
           {isAdmin && (
             <Button size="sm" variant="danger" onClick={() => setDeletingDepartment(row)}>
+              <Trash2 size={14} />
               Delete
             </Button>
           )}
@@ -129,7 +132,6 @@ export default function DepartmentsPage() {
         />
 
         {error && <Alert variant="danger">{error}</Alert>}
-        {deleteError && <Alert variant="danger">{deleteError}</Alert>}
 
         <Card className="p-0">
           <Table
@@ -157,8 +159,12 @@ export default function DepartmentsPage() {
         description={`Are you sure you want to delete "${deletingDepartment?.name}"? This cannot be undone.`}
         confirmLabel="Delete"
         isConfirming={isDeleting}
+        error={deleteError}
         onConfirm={handleDelete}
-        onCancel={() => setDeletingDepartment(null)}
+        onCancel={() => {
+          setDeletingDepartment(null);
+          setDeleteError(null);
+        }}
       />
     </DashboardLayout>
   );
